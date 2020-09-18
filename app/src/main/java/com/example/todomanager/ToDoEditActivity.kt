@@ -16,9 +16,7 @@ import java.lang.IllegalArgumentException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-
 import android.widget.RadioButton
-import java.text.DateFormat.*
 
 
 class ToDoEditActivity : AppCompatActivity() {
@@ -36,9 +34,15 @@ class ToDoEditActivity : AppCompatActivity() {
             titleEdit.setText(todos?.title)
             detailEdit.setText(todos?.detail)
             limitDateEdit.setText(DateFormat.format("yyyy/MM/dd", todos?.limit_date))
+            statusView.setText(todos?.status)
             delete.visibility = View.VISIBLE
         }else{
             delete.visibility = View.INVISIBLE
+        }
+
+        radioGroup.setOnCheckedChangeListener {
+            group, checkedId ->
+            statusView.text = findViewById<RadioButton>(checkedId).text
         }
 
         //  保存ボタンの処理
@@ -71,6 +75,7 @@ class ToDoEditActivity : AppCompatActivity() {
                         limitDateEdit.text.toString().toDate("yyyy/MM/dd")?.let{
                             todos?.limit_date = it
                         }
+                        todos?.status = statusView.text.toString()
                         alert ("修正しました") {
                             yesButton { finish() }
                         }.show()

@@ -74,6 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/limitDateView" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -115,6 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:text="ToDo"
         app:layout_constraintStart_toEndOf="@+id/todoView"
         app:layout_constraintTop_toBottomOf="@+id/limitDateEdit" />
 

@@ -134,8 +134,9 @@
         android:layout_width="120dp"
         android:layout_height="60dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#FFEB3B"
         android:text="削除"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="533dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

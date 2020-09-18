@@ -2,6 +2,9 @@ package com.example.todomanager
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateFormat
+import android.text.format.DateFormat.format
+import android.view.View
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
@@ -9,9 +12,14 @@ import kotlinx.android.synthetic.main.activity_to_do_edit.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.yesButton
 import java.lang.IllegalArgumentException
+//import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+
+import android.widget.RadioButton
+import java.text.DateFormat.*
+
 
 class ToDoEditActivity : AppCompatActivity() {
     private lateinit var realm: Realm
@@ -21,19 +29,64 @@ class ToDoEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do_edit)
         realm = Realm.getDefaultInstance()
 
+        val todoId = intent?.getLongExtra("todo_id", -1L)
+        if (todoId != -1L){
+            val todos = realm.where<ToDo>()
+                .equalTo("id", todoId).findFirst()
+            titleEdit.setText(todos?.title)
+            detailEdit.setText(todos?.detail)
+            limitDateEdit.setText(DateFormat.format("yyyy/MM/dd", todos?.limit_date))
+            delete.visibility = View.VISIBLE
+        }else{
+            delete.visibility = View.INVISIBLE
+        }
+
+        //  保存ボタンの処理
         save.setOnClickListener{
-            realm.executeTransaction{
-                val maxId = realm.where<ToDo>().max("id")
-                val nextId = (maxId?.toLong() ?: 0L) + 1
-                val todos = realm.createObject<ToDo>(nextId)
-                todos.title = titleEdit.text.toString()
-                todos.detail = detailEdit.text.toString()
-                limitDateEdit.text.toString().toDate("yyyy/MM/dd")?.let{
-                    todos.limit_date = it
+            when(todoId){
+                //  追加処理
+                -1L -> {
+                    realm.executeTransaction{
+                        val maxId = realm.where<ToDo>().max("id")
+                        val nextId = (maxId?.toLong() ?: 0L) + 1
+                        val todos = realm.createObject<ToDo>(nextId)
+                        todos.title = titleEdit.text.toString()
+                        todos.detail = detailEdit.text.toString()
+                        limitDateEdit.text.toString().toDate("yyyy/MM/dd")?.let{
+                            todos.limit_date = it
+                        }
+                        todos.status = statusView.text.toString()
+                    }
+                    alert("追加しました"){
+                        yesButton { finish() }
+                    }.show()
                 }
-                todos.status = statusView.text.toString()
+                //  更新処理
+                else -> {
+                    realm.executeTransaction{
+                        val todos = realm.where<ToDo>()
+                            .equalTo("id", todoId).findFirst()
+                        todos?.title = titleEdit.text.toString()
+                        todos?.detail = detailEdit.text.toString()
+                        limitDateEdit.text.toString().toDate("yyyy/MM/dd")?.let{
+                            todos?.limit_date = it
+                        }
+                        alert ("修正しました") {
+                            yesButton { finish() }
+                        }.show()
+                    }
+                }
             }
-            alert("追加しました"){
+        }
+
+        //  削除ボタンの処理
+        delete.setOnClickListener {
+            realm.executeTransaction{
+                realm.where<ToDo>().equalTo("id", todoId)
+                    ?.findFirst()
+                    ?.deleteFromRealm()
+            }
+            alert ("削除しました") {
                 yesButton { finish() }
             }.show()
         }

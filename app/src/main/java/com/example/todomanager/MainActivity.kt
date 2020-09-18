@@ -7,9 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import io.realm.Realm
+<<<<<<< HEAD
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.content_main.*
 import org.jetbrains.anko.startActivity
+=======
+>>>>>>> 3cf554b788caf740b7188dbcfc995731af06b5ff
 
 class MainActivity : AppCompatActivity() {
     private lateinit var realm: Realm
@@ -19,8 +22,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         realm = Realm.getDefaultInstance()
+<<<<<<< HEAD
         val todos = realm.where<ToDo>().findAll()
         listView.adapter = ToDoAdapter(todos)
+=======
+>>>>>>> 3cf554b788caf740b7188dbcfc995731af06b5ff
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             startActivity<ToDoEditActivity>()

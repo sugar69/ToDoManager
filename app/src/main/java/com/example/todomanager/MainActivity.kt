@@ -1,5 +1,6 @@
 package com.example.todomanager
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         realm = Realm.getDefaultInstance()
